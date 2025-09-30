@@ -1,9 +1,12 @@
-import { useCallback, useReducer, useRef} from 'react';
+import React, { useCallback, useMemo, useReducer, useRef} from 'react';
 import './App.css';
 import Header from './component/Header';
 import TodoEditor from './component/TodoEditor';
 import TodoList from './component/TodoList';
 // import TestComp from './component/TestComp';
+export const TodoStateContext = React.createContext(); // Todo 컨텍스트 생성 (컴포넌트 밖에 생성해야함!)
+export const TodoDispatchContext = React.createContext(); // Distpatch(onCrate, onDelete, onUpdate) 컨텍스트 생성 (컴포넌트 밖에 생성해야함!)
+
 function reducer(state, action) {
   switch (action.type) {
     case "CREATE":
@@ -66,14 +69,21 @@ const onDelete = useCallback((targetId) => {
   })
   
 },[]);
+const memoizedDispatches = useMemo (() => {
+  return {onCreate, onUpdate, onDelete};
+},[]);
   return (
     <div className="App">
       {/* <TestComp /> */}
       <Header />
-      <TodoEditor onCreate={onCreate} />
-      <TodoList todo={todo}  onUpdate={onUpdate} onDelete={onDelete} />
+      <TodoStateContext.Provider value={todo}>
+      {/* ↓ TodoDispathchContext에 포함할 컴포넌트를 TodoContext.Provider로 감싸고 props를 객체로 설정 */}
+      <TodoDispatchContext.Provider value={memoizedDispatches}> 
+        <TodoEditor />
+        <TodoList />
+      </TodoDispatchContext.Provider>
+      </TodoStateContext.Provider>
     </div>
   );
 }
-
 export default App;

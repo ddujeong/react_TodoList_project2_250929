@@ -1,4 +1,4 @@
-import { useReducer, useRef} from 'react';
+import { useCallback, useReducer, useRef} from 'react';
 import './App.css';
 import Header from './component/Header';
 import TodoEditor from './component/TodoEditor';
@@ -39,7 +39,7 @@ function App() {
 const [todo, dispatch] = useReducer(reducer,mockTodo);
 // const [todo, setTodo] = useState(mockTodo);
 
-const onCreate = (content) => { // 추가 버튼이 클릭되면 실행 될 이벤트핸들러
+const onCreate = useCallback((content) => { // 추가 버튼이 클릭되면 실행 될 이벤트핸들러
   dispatch({
     type: "CREATE",
     newItem:{
@@ -51,21 +51,21 @@ const onCreate = (content) => { // 추가 버튼이 클릭되면 실행 될 이�
   });
   idRef.current += 1;
  
-};
-const onUpdate = (targetId) => {
+},[]);
+const onUpdate = useCallback((targetId) => {
   dispatch({
     type: "UPDATE",
     targetId
   })
   
-};
-const onDelete =(targetId) => {
+},[]);
+const onDelete = useCallback((targetId) => {
   dispatch({
     type: "DELETE",
     targetId
   })
   
-};
+},[]);
   return (
     <div className="App">
       {/* <TestComp /> */}

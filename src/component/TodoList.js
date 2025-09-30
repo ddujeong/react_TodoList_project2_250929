@@ -63,7 +63,6 @@ function TodoList({todo, onUpdate, onDelete}) {
                         // -> props로 TodoItem 컴포넌트에 전달
                     ))}
                 </div></>: <h3>오늘 할일은 무엇인가요?✨</h3>}
-           
         </div>
         
     );
